@@ -1,0 +1,39 @@
+//<BUTTONS>====================================================================================================
+.btn{
+	display: inline-block;
+	padding: 5px 10px;
+	background-color: transparent;
+	border: 1px solid #fff;
+	font-size: 16px;
+	color: #fff;
+	position: relative;
+	@include anim(0.3s,0s);
+	span{
+		pointer-events: none;
+		position: relative;
+		z-index: 1;
+	}
+	&:before{
+		@include anim(0.3s,0s);
+		content:'';
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		width: 0%;
+		height: 100%;
+		background-color: #fff;
+	}
+	&:hover{
+		color: #000;
+		&:before{
+			content:'';
+			width: 100%;
+		}
+	}
+	&:disabled{
+		opacity: 0.2;
+		pointer-events: none;
+	}
+	&.fw{width: 100%;}
+}
+//</BUTTONS>====================================================================================================
