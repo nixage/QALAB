@@ -1,19 +1,32 @@
 export function createTable(className, users = []) {
   return `
-    <table class="${className}">
-      <thead class="user-table__head">
-        <tr >
-          <th data-type-sort="id">ID</th>
-          <th data-type-sort="firstName">FirstName</th>
-          <th data-type-sort="lastName">LastName</th>
-          <th data-type-sort="email">Email</th>
-          <th data-type-sort="phone">Phone</th>
-        </tr>
-      </thead>
-      <tbody class="user-table__body">
+    <div class="table-search">
+      <select class="table-search__type">
+        <option value="id" selected>Id</option>
+        <option value="firstName">firstName</option>
+      </select>
+      <div class="shown">
+        <input class="shown__input" placeholder=" " data-filter-str="true">
+        <div class="shown__label">Search</div>
+      </div>
+
+      <button class="btn" data-type-search="true"><span>Search</span></button>
+    </div>
+
+    <div class="${className}" style="max-width:100%;">
+      <div class="user-table__head">
+        <div class="user-table__row">
+          <div class="user-table__cell" data-type-sort="id">ID</div>
+          <div class="user-table__cell" data-type-sort="firstName">FirstName</div>
+          <div class="user-table__cell" data-type-sort="lastName">LastName</div>
+          <div class="user-table__cell" data-type-sort="email">Email</div>
+          <div class="user-table__cell" data-type-sort="phone">Phone</div>
+        </div>
+      </div>
+      <div class="user-table__body">
         ${renderUsers(users)}
-      </tbody>
-    </table>
+      </div>
+    </div>
 
     <div class="table-control">
       <button class="btn" disabled="true" data-type-prev="true"><span>PREV</span></button>
@@ -21,6 +34,7 @@ export function createTable(className, users = []) {
     </div>
 
     <div class="user-info"></div>
+
   `
 }
 
@@ -29,13 +43,13 @@ export function renderUsers(users){
   const template = []
   users.forEach(element => {
     template.push(`
-      <tr class="user-table__row">
-        <td class="user-table__cell" data-show-info="true" data-user-id="${element.id}" data-user-first-name="${element.firstName}">${element.id}</td>
-        <td class="user-table__cell">${element.firstName}</td>
-        <td class="user-table__cell">${element.lastName}</td>
-        <td class="user-table__cell">${element.email}</td>
-        <td class="user-table__cell">${element.phone}</td>
-      </tr>
+      <div class="user-table__row">
+        <div class="user-table__cell" data-show-info="true" data-user-id="${element.id}" data-user-first-name="${element.firstName}">${element.id}</div>
+        <div class="user-table__cell">${element.firstName}</div>
+        <div class="user-table__cell">${element.lastName}</div>
+        <div class="user-table__cell">${element.email}</div>
+        <div class="user-table__cell">${element.phone}</div>
+      </div>
     `)
   });
 

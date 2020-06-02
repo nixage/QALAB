@@ -39,6 +39,19 @@ const jsLoaders = () => {
   return loader;
 };
 
+
+const entry = () => {
+  if(isDev) { 
+    return {
+      main: ['@babel/polyfill', './index.js'],
+      unshift: 'webpack-dev-server/client?http://localhost:4200/'
+    }
+  }
+  return {
+    main: ['@babel/polyfill', './index.js'],
+  }
+}
+ 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   mode: 'development',
@@ -59,10 +72,7 @@ module.exports = {
     },
   },
   optimization: optimization(),
-  entry: {
-    main: ['@babel/polyfill', './index.js'],
-    unshift: 'webpack-dev-server/client?http://localhost:4200/'
-  },
+  entry: entry(),
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].[hash].js',

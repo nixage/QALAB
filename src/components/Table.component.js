@@ -1,5 +1,5 @@
 import { createTable, renderUsers, renderUserInfo } from "./table.template";
-import {isShowInfo,isSortTable,sortArray,isSorted,removeAttribute,isNext,isPrev} from './table.function'
+import {isShowInfo,isSortTable,sortArray,isSorted,removeAttribute,isNext,isPrev,isFilter} from './table.function'
 
 export class TableComponent {
 
@@ -8,6 +8,7 @@ export class TableComponent {
     this.className = 'user-table';
     this.users = [];
     this.currentUsers = [];
+    this.currentUsersFilter = [];
     this.currentFieldSort = '';
     this.limit = 10;
   }
@@ -32,6 +33,10 @@ export class TableComponent {
     this.tableControl = {
       prev: this.rootNode.querySelector('[data-type-prev]'),
       next: this.rootNode.querySelector('[data-type-next]')
+    }
+    this.tableFilter = {
+      type: this.rootNode.querySelector('.table-search__type'),
+      str: this.rootNode.querySelector('.shown__input')
     }
     this.initListeners()
   }
@@ -61,18 +66,30 @@ export class TableComponent {
         return
       }
       else if (isNext(event)){
+        this.tableControl.next.disabled = true;
+        this.tableControl.prev.disabled = false;
         removeAttribute(this.rootNode, this.currentFieldSort)
-        this.nextPage()
+        this.nextPage();
         return
       }
       else if (isPrev(event)){
+        this.tableControl.prev.disabled = true;
         removeAttribute(this.rootNode, this.currentFieldSort)
-        this.prevPage()
+        this.prevPage();        
         return
       }
-      else{
+      else if (isFilter(event)){
+        if (this.tableFilter.str.value.length < 1){
+          this.currentUsers = this.currentUsersFilter;
+          const template = renderUsers(this.currentUsers);
+          this.onChange(this.tableBody, template);
+          removeAttribute(this.rootNode, this.currentFieldSort);
+          return
+        }
+        this.filterTable(this.tableFilter)
         return
       }
+      return
     })
   }
 
@@ -95,13 +112,17 @@ export class TableComponent {
   }
 
   nextPage(){
+    if (!this.currentUsers.length) {
+      this.currentUsers = this.currentUsersFilter
+    }
     let index = this.users.findIndex( el => this.currentUsers[this.currentUsers.length -1 ].id === el.id);
     const isNextPage = this.users[index + this.limit] == undefined ? false : true;
     if (isNextPage) {
       const nextPageUsers = this.users.slice(index + 1, this.limit + index + 1);
       const nextPage = renderUsers(nextPageUsers);
       this.onChange(this.tableBody, nextPage)
-      this.currentUsers = nextPageUsers
+      this.currentUsers = nextPageUsers;
+      this.tableControl.next.disabled = false;
       return
     }
     this.loadUser()
@@ -112,6 +133,7 @@ export class TableComponent {
         this.users.push(...res);
         this.currentUsers = res;
         this.tableControl.prev.disabled = false;
+        this.tableControl.next.disabled = false;
       })
   }
 
@@ -119,15 +141,35 @@ export class TableComponent {
     if (this.users.length >= this.limit*2 ) {
       let index = this.users.findIndex(el => this.currentUsers[0].id === el.id)
       if (index === 0 ){
-        index = 10;
         this.tableControl.prev.disabled = true;
+        return
       }
       const prevUsers = this.users.slice(index - this.limit, index);
       this.currentUsers = prevUsers;
       const prevPage = renderUsers(prevUsers);
       this.onChange(this.tableBody, prevPage);
-    } 
+      this.tableControl.prev.disabled = false;
+    }
   }
+
+  filterTable(filter){
+    if (!this.currentUsersFilter.length){
+      this.currentUsersFilter = this.currentUsers;
+    }
+    const filterArray = this.currentUsersFilter.filter( el => {
+      const field = el[filter.type.value].toString().toLowerCase();
+      if( field.indexOf(filter.str.value.toLowerCase()) !== -1){
+        return el
+      }
+    })
+    const template = renderUsers(filterArray);
+    this.onChange(this.tableBody, template);
+    if (!this.currentUsersFilter.length){
+      this.currentUsersFilter = this.currentUsers;
+    }
+    this.currentUsers = filterArray;
+  }
+
 
   onChange(target, template){
     target.innerHTML = '';

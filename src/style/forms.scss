@@ -37,3 +37,35 @@
 	&.fw{width: 100%;}
 }
 //</BUTTONS>====================================================================================================
+.shown {
+	position: relative;
+	&__input {
+		border-radius: 0 !important;
+		width: 100%;
+		display: block;
+		padding: 0px 0px 10px 10px;
+		border-bottom: 1px solid #e0e0e0;
+		color: #fff;
+		background-color: transparent;
+		outline: none;
+		font-size: 18px;
+		&:focus{
+			border-bottom: 1px solid #1a73a8;
+		}
+		&:focus ~ .shown__label, &:not(:placeholder-shown) ~ .shown__label{
+			top: -18px;
+			font-size: 12px;
+			color: #e0e0e0;
+		}
+	}
+	/* .shown__label */
+	&__label {
+		@include anim(0.3s,0s);
+		position: absolute;
+		top: 0px;
+		left: 10px;
+		font-size: 18px;
+		color: #fff;
+		pointer-events: none;
+	}
+}

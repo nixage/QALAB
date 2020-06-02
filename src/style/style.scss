@@ -45,38 +45,27 @@ body {
   margin: 0 auto;
   padding: 0px 15px;
   width: 100%;
-  @media (max-width: $md1+px) {
-    max-width: 960px;
-  }
-  @media (max-width: $md2+px) {
-    max-width: 720px;
-  }
-  @media (max-width: $md3+px) {
-    max-width: 540px;
-  }
-  @media (max-width: $md4+px) {
-    max-width: none;
-  }
 }
 //</ОСНОВНАЯ СЕТКА>===========================================================================================================
 
 //<ПОДКЛЮЧЕНИЕ ФАЙЛОВ UI СТИЛЕЙ, ФОРМ И ГОТОВЫХ КЛАССОВ>====================================================================================================
 @import "forms.scss";
-@import "ui.scss";
 //</ПОДКЛЮЧЕНИЕ ФАЙЛОВ UI СТИЛЕЙ, ФОРМ И ГОТОВЫХ КЛАССОВ>====================================================================================================
 
 //<ОСНОВНОЙ БЛОК>====================================================================================================
 .table {
-	padding: 100px 0px;
+	padding: 50px 0px;
 }
 .user-table {
 	width: 100%;
 	border-collapse: collapse;
   color: #fff;
   margin: 0px 0px 50px 0px;
+  max-width: 100%;
+
   &__head {
 		font-size: 18px;
-		th{
+		.user-table__cell{
 			text-align: left;
 			padding: 10px;
 			border: 1px solid #fff;
@@ -99,23 +88,39 @@ body {
         @include anim(0.3s,0s);
       }
     }
-    th[data-sort]{
-      &:before{
-        transform: translate(0px, -50%) rotate(-90deg);
-      }
-    }
-    th[data-sort="sort-reverse"]{
-      &:before{
-        transform: translate(0px, -50%) rotate(90deg);
-      }
-    }
-	}
+  }
 	&__row{
+    display: flex;
 	}
 	&__cell{
 		font-size: 16px;
 		padding: 10px;
     border: 1px solid #fff;
+    width: 20%;
+    flex-grow: 1;
+  }
+  &__cell[data-sort]{
+    &:before{
+      transform: translate(0px, -50%) rotate(-90deg);
+    }
+  }
+  &__cell[data-sort="sort-reverse"]{
+    &:before{
+      transform: translate(0px, -50%) rotate(90deg);
+    }
+  }
+  &__cell:nth-child(1){
+    max-width: 60px;
+  }
+  &__cell:nth-child(4){
+    @media (max-width:$md3+px){
+      display: none;
+    }
+  }
+  &__cell:nth-child(5){
+    @media (max-width:$md2+px){
+      display: none;
+    }
   }
   &__cell[data-user-id]{
     cursor: pointer;
@@ -161,6 +166,19 @@ body {
   }
 }
 
+.table-search{
+  width: 200px;
+  text-align: center;
+  margin: 0 auto 50px auto;
+
+  &__type{
+    width: 100%;
+    margin: 0px 0px 30px 0px;
+  }
+  .shown{
+    margin: 0px 0px 20px 0px;
+  }
+}
 //====================================================================================================
 
 //</ОСНОВНОЙ БЛОК>====================================================================================================

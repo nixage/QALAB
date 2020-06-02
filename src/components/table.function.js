@@ -34,3 +34,7 @@ export function removeAttribute(root, fieldSort){
     el.removeAttribute('data-sort')
   }
 }
+
+export function isFilter(event) {
+  return event.target.dataset.typeSearch
+}
